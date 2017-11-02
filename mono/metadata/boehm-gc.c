@@ -250,7 +250,11 @@ mono_gc_base_init (void)
 
 	mono_thread_info_attach ();
 
+#ifdef HAVE_BDWGC_GC
+	GC_set_on_event (on_gc_notification);
+#else
 	GC_set_on_collection_event (on_gc_notification);
+#endif
 	GC_on_heap_resize = on_gc_heap_resize;
 
 	gc_initialized = TRUE;
@@ -965,6 +969,10 @@ create_allocator (int atype, int tls_key, gboolean slowpath)
 
 	g_assert_not_reached ();
 
+#ifdef HAVE_BDWGC_GC
+	return NULL;
+#else
+
 	if (atype == ATYPE_FREEPTR) {
 		name = slowpath ? "SlowAllocPtrfree" : "AllocPtrfree";
 	} else if (atype == ATYPE_FREEPTR_FOR_BOX) {
@@ -1176,6 +1184,7 @@ create_allocator (int atype, int tls_key, gboolean slowpath)
 	mono_mb_free (mb);
 
 	return res;
+#endif
 }
 
 static MonoMethod* alloc_method_cache [ATYPE_NUM];
@@ -1211,6 +1220,7 @@ mono_gc_get_managed_allocator (MonoClass *klass, gboolean for_box, gboolean know
 	 */
 	return NULL;
 
+#if 0
 	if (!SMALL_ENOUGH (klass->instance_size))
 		return NULL;
 	if (mono_class_has_finalizer (klass) || mono_class_is_marshalbyref (klass))
@@ -1242,6 +1252,7 @@ mono_gc_get_managed_allocator (MonoClass *klass, gboolean for_box, gboolean know
 		*/
 	}
 	return mono_gc_get_managed_allocator_by_type (atype, MANAGED_ALLOCATOR_REGULAR);
+#endif
 }
 
 MonoMethod*
@@ -1501,7 +1512,9 @@ mono_gc_pthread_create (pthread_t *new_thread, const pthread_attr_t *attr, void 
 #ifdef HOST_WIN32
 BOOL APIENTRY mono_gc_dllmain (HMODULE module_handle, DWORD reason, LPVOID reserved)
 {
+#ifdef GC_INSIDE_DLL
 	return GC_DllMain (module_handle, reason, reserved);
+#endif
 }
 #endif
 
@@ -1524,7 +1537,9 @@ mono_gc_get_vtable_bits (MonoClass *klass)
 void
 mono_gc_register_altstack (gpointer stack, gint32 stack_size, gpointer altstack, gint32 altstack_size)
 {
+#if !HAVE_BDWGC_GC
 	GC_register_altstack (stack, stack_size, altstack, altstack_size);
+#endif
 }
 
 int
@@ -1563,14 +1578,22 @@ mono_gc_make_root_descr_user (MonoGCRootMarkFunc marker)
 void
 mono_gc_toggleref_add (MonoObject *object, mono_bool strong_ref)
 {
+#ifndef HAVE_BDWGC_GC
 	if (GC_toggleref_add ((GC_PTR)object, (int)strong_ref) != GC_SUCCESS)
 	    g_error ("GC_toggleref_add failed\n");
+#else
+	g_assert_not_reached ();
+#endif
 }
 
 void
 mono_gc_toggleref_register_callback (MonoToggleRefStatus (*proccess_toggleref) (MonoObject *obj))
 {
+#ifndef HAVE_BDWGC_GC
 	GC_set_toggleref_func ((GC_ToggleRefStatus (*) (GC_PTR obj)) proccess_toggleref);
+#else
+	g_assert_not_reached ();
+#endif
 }
 
 /* Test support code */
@@ -1619,7 +1642,11 @@ mono_gc_register_finalizer_callbacks (MonoGCFinalizerCallbacks *callbacks)
 
 	fin_callbacks = *callbacks;
 
+#ifndef HAVE_BDWGC_GC
 	GC_set_await_finalize_proc ((void (*) (GC_PTR))fin_notifier);
+#else
+	g_assert_not_reached ();
+#endif
 }
 
 #define BITMAP_SIZE (sizeof (*((HandleData *)NULL)->bitmap) * CHAR_BIT)

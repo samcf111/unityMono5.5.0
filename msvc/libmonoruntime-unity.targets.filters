@@ -19,10 +19,10 @@
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files$(MonoRuntimeFilterSubFolder)\unity">
-      <UniqueIdentifier>{C6938EF2-A57F-4941-90EB-FCD7CF1E035D}</UniqueIdentifier>
+      <UniqueIdentifier>{8F21E3A7-2BB9-403D-8339-DE0C45C84CCB}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files$(MonoRuntimeFilterSubFolder)\unity">
-      <UniqueIdentifier>{56DCE5E4-A83E-487B-BFED-577E1F784C14}</UniqueIdentifier>
+      <UniqueIdentifier>{A38D033E-5AFC-4BEB-9F12-9A76F00E7749}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1,5 +1,13 @@
 #include <config.h>
+
+
 #include <mono/utils/mono-publib.h>
+
+/* allow Unity to use deprecated functions for now */
+#ifdef MONO_RT_EXTERNAL_ONLY
+#undef MONO_RT_EXTERNAL_ONLY
+#define MONO_RT_EXTERNAL_ONLY
+#endif
 #include <mono/metadata/unity-utils.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -205,7 +213,7 @@ void mono_unity_object_unbox_nullable(MonoObject* obj, MonoClass* nullableArgume
 	}
 	else if (obj->vtable->klass != nullableArgumentClass)
 	{
-		mono_raise_exception(mono_get_exception_invalid_cast());
+		mono_raise_exception_deprecated (mono_get_exception_invalid_cast());
 	}
 	else
 	{
@@ -1065,7 +1073,7 @@ mono_unity_class_get_generic_parameter_at (MonoClass* klass, guint32 index)
 	if (!generic_container || index >= generic_container->type_argc)
 		return NULL;
 
-	return mono_class_from_generic_parameter (mono_generic_container_get_param (generic_container, index), klass->image, FALSE);
+	return mono_class_from_generic_parameter_internal (mono_generic_container_get_param (generic_container, index));
 }
 
 MONO_API guint32
@@ -1100,6 +1108,8 @@ mono_unity_alloc(gsize size)
 MONO_API void
 mono_unity_thread_fast_attach (MonoDomain *domain)
 {
+	g_assert_not_reached ();
+#if 0
 	MonoInternalThread *thread;
 
 	g_assert (domain);
@@ -1112,11 +1122,14 @@ mono_unity_thread_fast_attach (MonoDomain *domain)
 	g_assert (mono_domain_set (domain, FALSE));
 
 	mono_profiler_thread_fast_attach (thread->tid);
+#endif
 }
 
 MONO_API void
 mono_unity_thread_fast_detach ()
 {
+	g_assert_not_reached ();
+#if 0
 	MonoInternalThread *thread;
 	MonoDomain *current_domain;
 
@@ -1134,5 +1147,6 @@ mono_unity_thread_fast_detach ()
 	// the thread to stay alive and keep running while the domain can be unloaded
 	g_assert (mono_domain_set (mono_get_root_domain (), FALSE));
 	mono_thread_pop_appdomain_ref ();
+#endif
 }
 
