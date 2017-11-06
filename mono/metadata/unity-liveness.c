@@ -17,8 +17,19 @@ typedef struct _GPtrArray custom_growable_array;
 void sgen_stop_world (int generation);
 void sgen_restart_world (int generation);
 #elif defined(HAVE_BOEHM_GC)
+#ifdef HAVE_BDWGC_GC
 extern void GC_stop_world_external();
 extern void GC_start_world_external();
+#else
+void GC_stop_world_external()
+{
+	g_assert_not_reached ();
+}
+void GC_start_world_external()
+{
+	g_assert_not_reached ();
+}
+#endif
 #else
 #error need to implement liveness GC API
 #endif
