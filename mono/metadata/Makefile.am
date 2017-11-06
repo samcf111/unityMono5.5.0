@@ -140,8 +140,7 @@ unity_sources = \
 	unity-memory-info.c \
 	unity-memory-info.h \
 	unity-utils.c   \
-	unity-utils.h   \
-	unity-liveness.c
+	unity-utils.h
 
 common_sources = \
 	$(platform_sources)	\
@@ -314,6 +313,9 @@ gc_dependent_sources = \
 	mono-hash.c	\
 	mono-conc-hash.c
 
+unity_gc_dependent_sources = \
+	unity-liveness.c
+
 boehm_sources = \
 	boehm-gc.c
 
@@ -330,15 +332,15 @@ sgen_sources = \
 	sgen-mono.c		\
 	sgen-client-mono.h
 
-libmonoruntime_la_SOURCES = $(common_sources) $(gc_dependent_sources) $(null_gc_sources) $(boehm_sources)
+libmonoruntime_la_SOURCES = $(common_sources) $(gc_dependent_sources) $(unity_gc_dependent_sources) $(null_gc_sources) $(boehm_sources)
 libmonoruntime_la_CFLAGS = $(BOEHM_DEFINES) $(LIBGC_CPPFLAGS)
 libmonoruntime_la_LIBADD = libmonoruntime-config.la
 
-libmonoruntimebdwgc_la_SOURCES = $(common_sources) $(gc_dependent_sources) $(null_gc_sources) $(boehm_sources)
+libmonoruntimebdwgc_la_SOURCES = $(common_sources) $(gc_dependent_sources) $(unity_gc_dependent_sources) $(null_gc_sources) $(boehm_sources)
 libmonoruntimebdwgc_la_CFLAGS = $(BDWGC_DEFINES) $(LIBGCBDWGC_CPPFLAGS)
 libmonoruntimebdwgc_la_LIBADD = libmonoruntime-config.la $(btls_libs)
 
-libmonoruntimesgen_la_SOURCES = $(common_sources) $(gc_dependent_sources) $(sgen_sources)
+libmonoruntimesgen_la_SOURCES = $(common_sources) $(gc_dependent_sources) $(unity_gc_dependent_sources) $(sgen_sources)
 libmonoruntimesgen_la_CFLAGS = $(SGEN_DEFINES)
 libmonoruntimesgen_la_LIBADD = libmonoruntime-config.la
 
