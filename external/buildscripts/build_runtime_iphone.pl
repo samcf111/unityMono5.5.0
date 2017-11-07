@@ -12,7 +12,6 @@ my $clean = 1;
 my $runtime = 0;
 my $xcomp = 0;
 my $simulator = 0;
-my $skipCrossCompiler = 1;
 
 GetOptions(
    "clean=i"=>\$clean,
@@ -36,7 +35,7 @@ if ($runtime)
 	system("perl", "$buildScriptsRoot/build.pl", "--build=1", "--clean=$clean", "--artifact=1", "--arch32=1", "--iphoneArch=armv7", "--forcedefaultbuilddeps=1") eq 0 or die ("Failed building mono for iphone\n");
 }
 
-if ($xcomp && !skipCrossCompiler)
+if ($xcomp)
 {
 	# TODO : This is a horrible waste of time, and we should fix it, but for now it gets things working.
 	# The mono we have in the build deps for bootstrapping doesn't have a 32bit slice, which we need in order to run the MonoAotOffsetsDumper.
