@@ -1547,7 +1547,10 @@ if test "x$support_boehm" = "xyes"; then
 	AC_SUBST(LIBGC_STATIC_LIBS)
 	AC_SUBST(libgc_dir)
 	AC_SUBST(BOEHM_DEFINES)
-
+else
+	if test "x$support_bdwgc" = "xyes"; then
+		AC_DEFINE_UNQUOTED(DEFAULT_GC_NAME, "External BDWGC (with typed GC)", [GC description])
+	fi
 fi
 AM_CONDITIONAL(SUPPORT_NULLGC, test "x$libgc" = "xnone")
 
