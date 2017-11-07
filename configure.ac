@@ -272,6 +272,8 @@ case "$host" in
 		*-tizen-linux-*)
 			platform_tizen=yes
 			;;
+		esac
+		case "$host" in
 		aarch64-*)
 			support_boehm=no
 			with_gc=sgen
