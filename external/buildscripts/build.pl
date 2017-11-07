@@ -34,7 +34,7 @@ system("source","~/.profile");
 
 my $build=0;
 my $clean=0;
-my $jobs=16;
+my $jobs=8;
 my $test=0;
 my $artifact=0;
 my $debug=0;
