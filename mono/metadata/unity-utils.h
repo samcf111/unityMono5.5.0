@@ -163,4 +163,10 @@ MONO_API MonoClass* mono_unity_class_get(MonoImage* image, guint32 type_token);
 MONO_API gpointer mono_unity_alloc(gsize size);
 MONO_API void mono_unity_g_free (void *ptr);
 
+// hack, FIXME jon
+MONO_API void mono_profiler_install_allocation (void* callback);
+MONO_API void mono_profiler_install_enter_leave (void*  enter, void*  fleave);
+MONO_API void mono_profiler_install_exception (void*  throw_callback, void*  exc_method_leave, void*  clause_callback);
+MONO_API void mono_unity_register_path_remapper (void*  func);
+
 #endif

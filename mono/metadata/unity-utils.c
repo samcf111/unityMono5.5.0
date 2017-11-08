@@ -1109,7 +1109,7 @@ MONO_API void
 mono_unity_thread_fast_attach (MonoDomain *domain)
 {
 	g_assert_not_reached ();
-#if 0
+#if 1
 	MonoInternalThread *thread;
 
 	g_assert (domain);
@@ -1121,7 +1121,7 @@ mono_unity_thread_fast_attach (MonoDomain *domain)
 	mono_thread_push_appdomain_ref (domain);
 	g_assert (mono_domain_set (domain, FALSE));
 
-	mono_profiler_thread_fast_attach (thread->tid);
+	//mono_profiler_thread_fast_attach (thread->tid);
 #endif
 }
 
@@ -1129,7 +1129,7 @@ MONO_API void
 mono_unity_thread_fast_detach ()
 {
 	g_assert_not_reached ();
-#if 0
+#if 1
 	MonoInternalThread *thread;
 	MonoDomain *current_domain;
 
@@ -1141,7 +1141,7 @@ mono_unity_thread_fast_detach ()
 	g_assert (current_domain);
 	g_assert (current_domain != mono_get_root_domain ());
 
-	mono_profiler_thread_fast_detach (thread->tid);
+	//mono_profiler_thread_fast_detach (thread->tid);
 
 	// Migrating to the root domain and popping the domain reference allows
 	// the thread to stay alive and keep running while the domain can be unloaded
@@ -1150,3 +1150,23 @@ mono_unity_thread_fast_detach ()
 #endif
 }
 
+// hack, FIXME jon
+void mono_profiler_install_allocation (void* callback)
+{
+
+}
+
+void mono_profiler_install_enter_leave (void*  enter, void*  fleave)
+{
+
+}
+
+void mono_profiler_install_exception (void*  throw_callback, void*  exc_method_leave, void*  clause_callback)
+{
+
+}
+
+void mono_unity_register_path_remapper (void*  func)
+{
+
+}
