@@ -1258,7 +1258,7 @@ mono_class_set_type_load_failure (MonoClass *klass, const char * fmt, ...) MONO_
 MonoException*
 mono_class_get_exception_for_failure (MonoClass *klass);
 
-char*
+UNITY_MONO_API char*
 mono_type_get_name_full (MonoType *type, MonoTypeNameFormat format);
 
 char*
